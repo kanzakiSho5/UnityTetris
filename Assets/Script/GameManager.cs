@@ -168,6 +168,33 @@ public class GameManager : MonoBehaviour
         return PutBlock(CurrentStatus);
     }
 
+    private void DeleteLine()
+    {
+        for(int i = 1; i < FIELD_HIGHT; i++)
+        {
+            bool isBlock = true;
+            for(int j = 1; j <= FIELD_WHIDTH; j++)
+            {
+                if(FieldCells[i,j] == 0)
+                {
+                    isBlock = false;
+                }
+            }
+
+            if(isBlock)
+            {
+                for(int j = i; j < FIELD_HIGHT; j++)
+                {
+                    for(int k = 1; k <= FIELD_WHIDTH; k++)
+                    {
+                        FieldCells[j, k] = FieldCells[j + 1, k];
+                    }
+                }
+                i--;
+            }
+        }
+    }
+
     private void DownBlock()
     {
         deleteBlock(CurrentStatus);
@@ -176,7 +203,8 @@ public class GameManager : MonoBehaviour
         {
             CurrentStatus.y++;
             PutBlock(CurrentStatus);
-            if(!CreateBlock())
+            DeleteLine();
+            if (!CreateBlock())
             {
                 StartCoroutine(GameOver());
             }
