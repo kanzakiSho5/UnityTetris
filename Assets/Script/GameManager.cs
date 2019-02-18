@@ -114,6 +114,8 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isGameOver)
+            return;
         TimeCount++;
         if(TimeCount % 30 == 0)
         {
@@ -192,6 +194,23 @@ public class GameManager : MonoBehaviour
                 FieldCellImgs[i, j].color = Color.red;
             }
         }
+
+        StartCoroutine(GameStart());
+    }
+
+    private IEnumerator GameStart()
+    {
+        for (int i = FIELD_HIGHT - 1; i >= 0 ; i--)
+        {
+            yield return new WaitForSeconds(0.1f);
+            for (int j = 0; j < FIELD_WHIDTH; j++)
+            {
+                FieldCellImgs[i, j].color = Color.white;
+            }
+        }
+
+        isGameOver = false;
+        init();
     }
 
     private bool PutBlock(Status status, bool action = false)
